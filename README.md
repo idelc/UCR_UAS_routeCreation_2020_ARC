@@ -17,4 +17,4 @@ This will make it simpler to break the tasks up into small, easy-to-test segment
 
 * `scanRoute [Options] ./out.txt`: based on `[Options]`, generates a route to scan the ADLC search area. Options would include things such as scan height, scan speed, etc.
 
-* Upload: MavProxy will be used to upload the finished route file to the UAV.
+* Upload: QGroundControl will be used to upload the finished route file to the UAV.
