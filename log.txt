@@ -1,0 +1,16 @@
+Process:
+Mandatpry waypoints and Obstacles received, read, and stored.
+Points passed in, in sets of two: if they are further than 55 feet a midpoint is found and coupled with one of the points 
+    to repeat the process. A check is done to see if point is in an obstacle, if it is not, proccess continues.
+
+    If point is in an obstacle, a check is made to see if it is a mandatory waypoint, and if so a change
+    in altitude will be made to properly meet the requirements of passing through said point.(TODO: implement)
+    Otherwise, obstacle will be divided into points  constructin its circumferance with some room left for turn
+    radius and wingspan. Then the points are passed into a graph data structure to construct the shortest route.
+
+        The graph data structure will connect the points in a circle and will connect the two end points to the 
+        point they are closest to in the circle. Then, a SSSR algorithm will be run (likely Dijkstra's algorithm) to 
+        find the shortest route and pass those points back to the original program to be put back into the list.
+
+Points are passed into a list of waypoints and handed over to be writen into a format acceptable for the ground control program. (TODO:implement)
+The program has a small menu and output to notify user of proccess. (TODO:implement)
