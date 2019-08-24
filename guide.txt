@@ -1,3 +1,4 @@
+// TODO: update to reflect new method post 24 August 2019
 Process:
 Mandatpry waypoints and Obstacles received, read, and stored.
 Points passed in, in sets of two: if they are further than 55 feet a midpoint is found and coupled with one of the points 

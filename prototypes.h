@@ -30,7 +30,7 @@ struct collision {          //is the object that defines a detected collision
 };
 
 
-std::list<point> subdivideCircle(const obstacle, int numPoints);
+std::list<point> subdivideCircle(const obstacle&, int numPoints);
 
 std::vector<collision> detect(std::list<waypoint> originalRoute, std::vector<obstacle> obstacles);
 
@@ -40,10 +40,10 @@ std::vector<obstacle> readObstacles2(std::string);
 
 std::list<point> readPoints(std::string);
 
-int colides(const point, vector<obstacle>);
+int colides(const point&, vector<obstacle>&);
 
-void routeCreation(list<point>, list<obstacle>, std::string);
+double distanceFt(point&, point&);
 
-double distanceFt(point, point);
+point midpoint(point&, point&);
 
-point midpoint(point, point);
+bool pathCheckClear(const point&, const point&, const obstacle&);

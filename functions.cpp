@@ -118,7 +118,7 @@ std::list<point> readPoints(string fileName){
    return temps;
 }
 
-int colides(const point toCheck, vector<obstacle> obstacles){
+int colides(const point& toCheck, const vector<obstacle>& obstacles){ // int, not bool, returns coliding obstacle index
    double x = 0, y = 0;
    x = toCheck.log;
    y = toCheck.lat;
@@ -134,7 +134,7 @@ int colides(const point toCheck, vector<obstacle> obstacles){
    return -1; 
 }
 
-double distanceFt(point one, point two){
+double distanceFt(const point& one, const point& two){
    // Using Haversine formula in order to acount for curvature
    // likely irrelevant due to actual distances but included just in case
    // Note: in the case of resource concervation being an issue, this is one place
@@ -154,7 +154,7 @@ double distanceFt(point one, point two){
    return rad * c; 
 }
 
-point midpoint(point one, point two){
+point midpoint(const point& one, const point& two){
    point mid;
    mid.lat = (one.lat + two.lat) / 2;
    mid.log = (one.log + two.log) / 2;
@@ -164,7 +164,7 @@ point midpoint(point one, point two){
 //Assuming number of div.(variable n) >= 3
 
                    //x,y vals;       radius; #of sides for poly.
-std::list<point> subdivideCircle(const obstacle o, int n) {
+std::list<point> subdivideCircle(const obstacle& o, int n) {
    std::list<point> points;
    point pt;
    for(int i = 0; i < n; ++i) {
@@ -174,12 +174,6 @@ std::list<point> subdivideCircle(const obstacle o, int n) {
    }
    return points;
 }
-
-
-
-
-//----------------------------------------------------------
-
 // Given the center of the obstacle,
 // its radius, and the number of points we want
 // this function will create and return a list 
@@ -189,3 +183,11 @@ std::list<point> subdivideCircle(const obstacle o, int n) {
 // to find the geographical loc. of the points
 // and not just their relation to the circle (which was
 // found using simple trig.)
+
+// Distance from a point to a line, will return true for clear
+// latitude used as y, longitude as x. Since theire is "no constraint on height" it shall be ignored.
+bool pathCheckClear(const point& first, const point& second, const obstacle& toTest){
+   return (abs(((second.lat - first.lat)*toTest.log) - ((second.log - first.log)*toTest.lat) + (second.log*first.lat) - (second.lat*first.log))) / distanceFt(first, second);
+}
+// Above: 2A/distance
+
