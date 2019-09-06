@@ -53,3 +53,5 @@ bool pathCheckClear(const point&, const point&, const obstacle&);
 bool turnAhead(const point&, const point&, const point&);
 
 double turnAngleMax(const point&, const point&);
+
+point radialRevision(point )

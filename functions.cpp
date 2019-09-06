@@ -12,7 +12,7 @@ using namespace std;
 #include "prototypes.h"
 
 double EXTRA_FEET_TO_ROUTE = 0; // TODO: Add real value to 
-                                // acount for wingspan and turn radius
+                                // acount for wingspan
 
 double TURN_RADIUS_FT = 150;
 
