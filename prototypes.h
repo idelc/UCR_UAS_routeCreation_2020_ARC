@@ -9,13 +9,13 @@ class point{               //specifies a point in space in decimal degrees
     double height;
     bool crit;
     point();
-    point(double lati, double lo, double hi = 0): lat(lati), log(lo), crit(false){};
+    point(double lati, double lo, double hi = 200): lat(lati), log(lo), crit(false){};
 };
 
 class waypoint : public point{
  public:
     int sequenceNumber; 
-    waypoint(double lati, double lo, int seq, double hi = 0): point(lati, lo, hi), sequenceNumber(seq){};    //what number are we along route
+    waypoint(double lati, double lo, int seq, double hi = 200): point(lati, lo, hi), sequenceNumber(seq){};    //what number are we along route
 };
 
 class obstacle : public point{
@@ -23,16 +23,18 @@ class obstacle : public point{
     double radius;
 };
 
-struct collision {          //is the object that defines a detected collision
-    obstacle    danger;     //the object that will be hit in a direct route
-    waypoint       first;   //from the point first
-    waypoint       last;    //to the point last
+class trajectory{
+ public:
+    double coefficientI;
+    double coefficientJ;
+    double coefficientK;
+    trajectory();
+    trajectory(double, double, double);
+    trajectory(const point&, const point&);
+    double angleBetween(const trajectory&);
 };
 
-
 std::list<point> subdivideCircle(const obstacle&, int numPoints);
-
-std::vector<collision> detect(std::list<waypoint> originalRoute, std::vector<obstacle> obstacles);
 
 std::vector<obstacle> readObstacles(std::string);
 
@@ -47,3 +49,7 @@ double distanceFt(point&, point&);
 point midpoint(point&, point&);
 
 bool pathCheckClear(const point&, const point&, const obstacle&);
+
+bool turnAhead(const point&, const point&, const point&);
+
+double turnAngleMax(const point&, const point&);

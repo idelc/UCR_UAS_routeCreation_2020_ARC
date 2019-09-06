@@ -14,6 +14,10 @@ using namespace std;
 double EXTRA_FEET_TO_ROUTE = 0; // TODO: Add real value to 
                                 // acount for wingspan and turn radius
 
+double TURN_RADIUS_FT = 150;
+
+double DEFAULT_ALTITUDE = 200;
+
 vector<obstacle> readObstacles(string fileName) {
    obstacle temp; 
    vector<obstacle> temps;
@@ -184,10 +188,48 @@ std::list<point> subdivideCircle(const obstacle& o, int n) {
 // and not just their relation to the circle (which was
 // found using simple trig.)
 
+
 // Distance from a point to a line, will return true for clear
 // latitude used as y, longitude as x. Since theire is "no constraint on height" it shall be ignored.
 bool pathCheckClear(const point& first, const point& second, const obstacle& toTest){
-   return (abs(((second.lat - first.lat)*toTest.log) - ((second.log - first.log)*toTest.lat) + (second.log*first.lat) - (second.lat*first.log))) / distanceFt(first, second);
+   if(distanceFt(first,second) == 0){
+      return true;
+   }
+   return (toTest.radius + EXTRA_FEET_TO_ROUTE) < (abs(((second.lat - first.lat)*toTest.log) - ((second.log - first.log)*toTest.lat) + (second.log*first.lat) - (second.lat*first.log))) / distanceFt(first, second);
 }
-// Above: 2A/distance
+// Above: rad+wingspan&misc < 2Area/distance. 
+// If true, the distance from the center of the obstacle to its perimiter is less than 
+// the distance from the center to the path, thus the path clears the obstacle.
+
+
+// Checks if points will requite a turn
+bool turnAhead(const point& first, const point& second, const point& third){
+   trajectory ogPath(first, second);
+   trajectory potPath(second, third);
+   double hypoAng = ogPath.angleBetween(potPath);
+   double maxTurn = turnAngleMax(second, third);
+   return hypoAng > maxTurn;
+}
+
+trajectory::trajectory():coefficientI(0), coefficientJ(0), coefficientK(0){};
+
+trajectory::trajectory(double i, double j, double k):coefficientI(i), coefficientJ(j), coefficientK(k){};
+
+// latitude used as y, longitude as x, height as z
+trajectory::trajectory(const point& tail, const point& head): coefficientI(head.log - tail.log), coefficientJ(head.lat - tail.lat), coefficientK(head.height - tail.height){}
+
+double trajectory::angleBetween(const trajectory& second){
+   double crossScalar = (this->coefficientI * second.coefficientI) + (this->coefficientJ * second.coefficientJ) + (this->coefficientK * second.coefficientK);
+   double magFirst = sqrt((this->coefficientI * this->coefficientI) + (this->coefficientJ * this->coefficientJ) + (this->coefficientK * this->coefficientK)); 
+   double magSecond = sqrt((second.coefficientI * second.coefficientI) + (second.coefficientJ * second.coefficientJ) + (second.coefficientK * second.coefficientK));
+   return acos(crossScalar/(magFirst*magSecond));
+}
+
+double turnAngleMax(const point& center, const point& edge){
+   double radLength = distanceFt(center, edge) / 2;
+   return (M_PI / 2) - acos(radLength/TURN_RADIUS_FT);
+}
+
+
+
 
