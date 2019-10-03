@@ -42,7 +42,7 @@ std::vector<obstacle> readObstacles2(std::string);
 
 std::list<point> readPoints(std::string);
 
-int colides(const point&, vector<obstacle>&);
+int collides(const point&, vector<obstacle>&);
 
 double distanceFt(point&, point&);
 
