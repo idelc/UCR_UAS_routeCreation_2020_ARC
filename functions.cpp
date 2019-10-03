@@ -122,7 +122,7 @@ std::list<point> readPoints(string fileName){
    return temps;
 }
 
-int colides(const point& toCheck, const vector<obstacle>& obstacles){ // int, not bool, returns coliding obstacle index
+int collides(const point& toCheck, const vector<obstacle>& obstacles){ // int, not bool, returns coliding obstacle index
    double x = 0, y = 0;
    x = toCheck.log;
    y = toCheck.lat;
