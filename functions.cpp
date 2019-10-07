@@ -230,6 +230,41 @@ double turnAngleMax(const point& center, const point& edge){
    return (M_PI / 2) - acos(radLength/TURN_RADIUS_FT);
 }
 
+vector<point> arcTurn(point& beg, point& mid, point& end){
+   point comp1 = midpoint(beg, mid);
+   point comp2 = midpoint(mid, end);
+   point center = midpoint(comp1, comp2);
+   double radiusOfArc = distanceFt(center, comp1);
+   // find angle between beg, mid, split arc up into points, add
 
+   // do the same between mid and end, add
+   // return
+}
+
+point radialRevision(point& clearB, point& conf, point& clearE, obstacle& inWay){
+   // needs curve turning implementation
+}
+
+
+
+
+
+
+
+
+vector<waypoint> routeCreation(){ // DO NOT IMPLEMEMT BEFORE ALL FUNCTIONS ARE MADE
+   // read points and obstacles to be used
+   // make the storage containers
+   // push into stack
+   // pop first two
+   // check if clear
+   // if path is bad, ends are good, midpoint, push all back in order
+   // if one end is bad, pull out next end and use radial revision
+   // if out of bounds... idk yet
+   // else push to final stack
+   // when done with waypoints, push in special drop case
+   // handle camera sweep
+   // handle approach to landing 200m / ~600ft of clear space.
+}
 
 

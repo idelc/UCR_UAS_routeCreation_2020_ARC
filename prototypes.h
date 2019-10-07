@@ -54,4 +54,10 @@ bool turnAhead(const point&, const point&, const point&);
 
 double turnAngleMax(const point&, const point&);
 
-point radialRevision(point )
+vector<point> arcTurn(point&, point&, point&);
+
+point radialRevision(point&, point&, point&, obstacle&);
+
+// waypointRadial Revision? If all else is done, plan and implement
+
+vector<waypoint> routeCreation();
