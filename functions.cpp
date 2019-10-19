@@ -268,8 +268,21 @@ vector<point> arcTurn(point& beg, point& mid, point& end){
    return toReturn;
 }
 
-point radialRevision(point& clearB, point& conf, point& clearE, obstacle& inWay){
-   
+// Vector -> * length -> add vector to original point for new point
+vector<point> radialRevision(point& clearB, point& conf, point& clearE, obstacle& inWay){
+   point centObs(inWay.lat, inWay.log);
+   trajectory radExt(centObs, conf);
+   radExt.coefficientI = (radExt.coefficientI * (inWay.radius + 50));
+   radExt.coefficientJ = (radExt.coefficientJ * (inWay.radius + 50));
+   point confExt((radExt.coefficientI + inWay.lat), (radExt.coefficientJ + inWay.log), conf.height);
+   //if(URGENT: must check if out of bounds) {
+   //    radExt.coefficientI *= -1;
+   //    radExt.coefficientJ *= -1;
+   //    confExt.lat = radExt.coefficientI + inWay.lat;
+   //    confExt.log = radExt.coefficientJ + inWay.log; 
+   // }
+   // check if in other obstacles?
+   return arcTurn(clearB, confExt, clearE);
 }
 
 

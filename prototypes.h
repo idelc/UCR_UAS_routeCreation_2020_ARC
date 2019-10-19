@@ -56,7 +56,7 @@ double turnAngleMax(const point&, const point&);
 
 vector<point> arcTurn(point&, point&, point&);
 
-point radialRevision(point&, point&, point&, obstacle&);
+vector<point> radialRevision(point&, point&, point&, obstacle&);
 
 // waypointRadial Revision? If all else is done, plan and implement
 
