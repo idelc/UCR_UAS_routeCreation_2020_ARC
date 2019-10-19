@@ -231,26 +231,45 @@ double turnAngleMax(const point& center, const point& edge){
 }
 
 vector<point> arcTurn(point& beg, point& mid, point& end){
-   
+   vector <point> toReturn(11);
+   toReturn.at(0) = beg;
+   toReturn.at(5) = mid;
+   toReturn.at(10) = end; 
    point comp1 = midpoint(beg, mid);
    point comp2 = midpoint(mid, end);
    point center = midpoint(comp1, comp2);
    double radiusOfArc = distanceFt(center, comp1);
    // find angle between beg, mid, split arc up into points, add
+   // do the same between mid and end, add
+   // return
    trajectory centBeg(center, beg);
    trajectory centMid(center, mid);
    trajectory centEnd(center, end);
    double begMidAng = centBeg.angleBetween(centMid);
    double midEndAng = centMid.angleBetween(centEnd);
-   double partSpacing1 = begMidAng * radiusOfArc;
-   double partSpacing2 = midEndAng * radiusOfArc;
-   
-   // do the same between mid and end, add
-   // return
+   double partSpacing1 = (begMidAng * radiusOfArc) / 4;
+   double partSpacing2 = (midEndAng * radiusOfArc) / 4;
+
+   double angToUse1 = partSpacing1 / radiusOfArc;
+   double angToUse2 = partSpacing2 / radiusOfArc;
+   for(unsigned i = 1; i <= 4; i++){
+      point tempPoint1;
+      point tempPoint2;
+      angToUse1 = angToUse2 * i;
+      angToUse2 = angToUse2 * i;
+
+      tempPoint1.log = beg.log + (radiusOfArc * sin(angToUse1));
+      tempPoint1.lat = beg.lat - (radiusOfArc * (1 - cos(angToUse1)));
+      toReturn.at(i) = tempPoint1;
+      tempPoint2.log = mid.log + (radiusOfArc * sin(angToUse2));
+      tempPoint2.lat = mid.lat - (radiusOfArc * (1 - cos(angToUse2)));
+      toReturn.at(i + 5) = tempPoint2;
+   }
+   return toReturn;
 }
 
 point radialRevision(point& clearB, point& conf, point& clearE, obstacle& inWay){
-   // needs curve turning implementation
+   
 }
 
 
