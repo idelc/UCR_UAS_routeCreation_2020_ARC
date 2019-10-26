@@ -39,6 +39,7 @@ vector<obstacle> readObstacles(string fileName) {
       temp.radius = rad; 
       temps.push_back(temp); //adds to vector
    }
+   read.close();
    return temps;
 }
 
@@ -80,6 +81,7 @@ vector<obstacle> readObstacles2(string fileName){
          temps.push_back(temp);
       }
    }
+   read.close();
    return temps;
 }
 
@@ -119,6 +121,7 @@ std::list<point> readPoints(string fileName){
          temps.push_back(temp);
       }
    }
+   read.close();
    return temps;
 }
 
@@ -285,6 +288,41 @@ vector<point> radialRevision(point& clearB, point& conf, point& clearE, obstacle
    return arcTurn(clearB, confExt, clearE);
 }
 
+vector<point> boundaryReader(string fileName){
+   point temp; 
+   vector<point> temps;
+   ifstream read(fileName);
 
+   if(!read.is_open()){
+      cout << "Error opening file" << endl;
+      exit(1); 
+   }
 
-
+   double deg;//reads in degrees
+   double min;//reads in minutes
+   double sec;//reads in seconds
+   char   head;
+   char   rand;//will trash commas
+   bool   first = true;
+   double tempNum = 0;
+   
+   while(read >> head >> deg >> rand >> min >> rand >> sec){ //uses inherent boolean
+      if((head == 'S') || (head == 'W')){
+         tempNum = (deg + (min/60) + (sec/3600)) * -1;
+      }
+      else{
+         tempNum = (deg + (min/60) + (sec/3600));
+      }
+      if(first){
+         temp.lat = tempNum;
+         first = false;
+      }
+      else{
+         temp.log = tempNum;
+         first = true;
+         temps.push_back(temp);
+      }
+   }
+   read.close();
+   return temps;
+}
