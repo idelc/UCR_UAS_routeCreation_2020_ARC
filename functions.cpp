@@ -288,6 +288,12 @@ vector<point> radialRevision(point& clearB, point& conf, point& clearE, obstacle
    return arcTurn(clearB, confExt, clearE);
 }
 
+void routeWritter(){
+   ofstream write(finFileName());
+   if(!write.is_open()){
+      cout << "\nError opening file for final output. Terminating...\n";
+      exit(1);
+   }
 vector<point> boundaryReader(string fileName){
    point temp; 
    vector<point> temps;

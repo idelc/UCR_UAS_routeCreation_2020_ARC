@@ -61,3 +61,11 @@ vector<point> radialRevision(point&, point&, point&, obstacle&);
 // waypointRadial Revision? If all else is done, plan and implement
 
 vector<waypoint> routeCreation();
+
+void routeWritter();
+
+void wayWritter(const point);
+
+void dropWritter(const point);
+
+string finFileName();
