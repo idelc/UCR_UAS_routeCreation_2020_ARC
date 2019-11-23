@@ -26,7 +26,6 @@ void masterRouteMaker(){
    cin >> trash;
    cout << endl;
    cout << "Preparing route generation...\n";
-
    cout << "Please enter the full name of the obstacle file: ";
    getline(cin, fileName);
    cout << endl;
@@ -62,7 +61,6 @@ void masterRouteMaker(){
       tempPoint2 = stackOfPoints.top();
       stackOfPoints.pop();
       badPath = false;
-      
       col = -1;
       col = collides(tempPoint2, obstacles);
       if(col != -1){
