@@ -6,6 +6,7 @@
 #include <cmath>
 #include <queue>
 #include <list>
+#include <stack>
 
 using namespace std;
 
@@ -86,6 +87,33 @@ vector<obstacle> readObstacles2(string fileName){
 }
 
 std::list<point> readPoints(string fileName){
+   point temp; 
+   list<point> temps;
+   ifstream read(fileName);
+
+   if(!read.is_open()) {
+      cout << "Error opening file" << endl;
+      exit(1); 
+   }
+
+   double la;//reads in lattitude val
+   double lo;//reads in longitude val
+   double he;//reads in height
+   char  com;//will trash commas
+   
+   while(read >> la >> com >> lo >> com >> he) {//uses inherent boolean
+      temp.lat    = la;
+      temp.log    = lo; //reads in val
+      temp.height = he; 
+      temp.crit = true;
+      temps.push_back(temp); //adds to list
+   }
+   read.close();
+   return temps;
+}
+
+
+std::list<point> readPoints2(string fileName){
    point temp; 
    list<point> temps;
    ifstream read(fileName);
@@ -288,19 +316,129 @@ vector<point> radialRevision(point& clearB, point& conf, point& clearE, obstacle
    return arcTurn(clearB, confExt, clearE);
 }
 
-void routeWritter(){
+void routeWritter(list<waypoint> wayPointsFin){
+   cout << "Writing file OwO\n";
    ofstream write(finFileName());
    if(!write.is_open()){
       cout << "\nError opening file for final output. Terminating...\n";
       exit(1);
+   } 
+
+   write << "{\n\t\"fileType\": \"Plan\",\n";
+   write << "\"geoFence\": {\n";
+   write << "\t\t\"circles\": [";
+   write << "\t\t],\n";
+   write << "\t\t\"polygons\": [";
+   write << "\t\t],\n";
+   write << "\n\"version\": 2\n\t},\n";
+   write << "\t\"groundStation\": \"QGroundControl\",\n";
+   write << "\t\"mission\": {\n";
+   write << "\t\t\"cruiseSpeed\": 12.0,\n";
+   write << "\t\t\"firmwareType\": 3,\n";
+   write << "\t\t\"hoverSpeed\": 5,";
+   write << "\t\t\"items\": [\n";
+   write << "\t\t\t{\n";
+   write << "\t\t\t\t\"autoContinue\": true,\n";
+   write << "\t\t\t\t\"command\": 22,\n";
+   write << "\t\t\t\t\"doJumpId\": 1,\n";
+   write << "\t\t\t\t\"frame\": 3,\n";
+   write << "\t\t\t\t\"params\": [\n";
+   write << "\t\t\t\t\t 15,\n"; // takeoff pitch
+   write << "\t\t\t\t\t 0,\n";
+   write << "\t\t\t\t\t 0,\n";
+   write << "\t\t\t\t\t null,\n";
+   write << "\t\t\t\t\t 0,\n";
+   write << "\t\t\t\t\t 0,\n";
+   write << "\t\t\t\t\t 60.96,\n"; // height in meters
+   write << "\t\t\t\t],\n";
+   write << "\t\t\t\t\"type\": \"SimpleItem\"\n";
+   write << "\t\t\t},\n";
+   
+   int lastTemp = 1;
+   for(std::list<waypoint>::iterator it= wayPointsFin.begin(); it != wayPointsFin.end(); ++it){
+      pointWriter(write,*it);
+      lastTemp = it->sequenceNumber + 1;
    }
+
+   write << "\t\t\t{\n";
+   write << "\t\t\t\t\"autoContinue\": true,\n";
+   write << "\t\t\t\t\"command\": 22,\n";
+   write << "\t\t\t\t\"doJumpId\": ";
+   write << lastTemp << ",\n";
+   write << "\t\t\t\t\"frame\": 3,\n";
+   write << "\t\t\t\t\"params\": [\n";
+   write << "\t\t\t\t\t 15,\n"; // takeoff pitch
+   write << "\t\t\t\t\t 0,\n";
+   write << "\t\t\t\t\t 0,\n";
+   write << "\t\t\t\t\t null,\n";
+   write << "\t\t\t\t\t 0,\n";
+   write << "\t\t\t\t\t 0,\n";
+   write << "\t\t\t\t\t 60.96,\n"; // height in meters
+   write << "\t\t\t\t],\n";
+   write << "\t\t\t\t\"type\": \"SimpleItem\"\n";
+   write << "\t\t\t}\n";
+
+   write << "\t\t],\n";
+   write << "\t\t\"plannedHomePosition\": [\n";
+   write << "\t\t\t38.14575538617687,\n";
+   write << "\t\t\t-76.42885386,\n";
+   write << "\t\t\t3\n";
+   write << "\t\t\"vehicleType\": 1,\n";
+   write << "\t\t\"versio\": 2\n";
+   write << "\t},\n";
+   write << "\t\"rallyPoints\": {\n";
+   write << "\t\t\"points\": [\n";
+   write << "\t\t],\n";
+   write << "\t\t\"version\": 2\n";
+   write << "\t},\n";
+   write << "\t\"version\": 1\n";
+   write << "}\n";
+   write.close();
+   
+   cout << "File written :D. Happy Travels" << endl;
+}
+
+void pointWriter(ostream& out, const waypoint& toWriteq){
+   out << "\t\t\t{\n";
+   out << "\t\t\t\t\"AMSLAltAboveTerrain\": ";
+   out << toWriteq.height/3.2808 << ',' << endl;
+   out << "\t\t\t\t\"Altitude\": ";
+   out << toWriteq.height/3.2808 << ',' << endl;
+   out << "\t\t\t\t\"AltitudeMode\": 1,\n";
+   out << "\t\t\t\t\"autoContinue\": true,\n";
+   out << "\t\t\t\t\"command\": 16,\n";
+   out << "\t\t\t\t\"doJumpId\": " << toWriteq.sequenceNumber + 1;
+   out << ",\n";
+   out << "\t\t\t\t\"frame\": 3,\n";
+   out << "\t\t\t\t\"params\": [\n";
+   out << "\t\t\t\t\t0,\n";
+   out << "\t\t\t\t\t0,\n";
+   out << "\t\t\t\t\t0,\n";
+   out << "\t\t\t\t\tnull,\n"; 
+   out << "\t\t\t\t\t" << toWriteq.lat << endl; // latitude, y
+   out << "\t\t\t\t\t" << toWriteq.log << endl; // longitude, x
+   out << "\t\t\t\t\t" << toWriteq.height/3.2808 << endl;
+   out << "\t\t\t\t],\n";
+   out << "\t\t\t\t\"type\": \"SimpleItem\"\n";
+   out << "\t\t\t},\n";
+}
+
+
+string finFileName(){
+   cout << "What would you like to call the file? (No spaces, just the name)\nDo not include an extension!\n" << endl;
+   string temp;
+   getline(cin, temp);
+   temp += ".plan";
+   return temp;
+}
+
 vector<point> boundaryReader(string fileName){
    point temp; 
    vector<point> temps;
    ifstream read(fileName);
 
    if(!read.is_open()){
-      cout << "Error opening file" << endl;
+      cout << "Error opening file. Terminating..." << endl;
       exit(1); 
    }
 
