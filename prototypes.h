@@ -11,13 +11,14 @@ class point{               //specifies a point in space in decimal degrees
 	double log;
     double height;
     bool crit;
-    point();
+    point(): lat(0), log(0), height(0), crit(0){};
     point(double lati, double lo, double hi = 200): lat(lati), log(lo), crit(false){};
 };
 
 class waypoint : public point{
  public:
-    int sequenceNumber; 
+    int sequenceNumber;
+    waypoint(): point(), sequenceNumber(-1){};
     waypoint(double lati, double lo, int seq, double hi = 200): point(lati, lo, hi), sequenceNumber(seq){};    //what number are we along route
 };
 
@@ -65,9 +66,7 @@ vector<point> radialRevision(point&, point&, point&, obstacle&);
 
 vector<point> radialRevision(point& clearB, point& conf, point& clearE, obstacle& inWay);
 
-vector<waypoint> routeCreation();
-
-void routeWritter();
+void routeWritter(list<waypoint>& );
 
 void wayWritter(const point);
 

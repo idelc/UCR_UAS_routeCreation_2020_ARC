@@ -39,6 +39,64 @@ void masterRouteMaker(){
    points = readPoints(fileName);
    cout << "Points successfully read.\n";
 
-   cout << "Preparing dynamic creation containers\n";
+   cout << "Preparing route creation containers...\n";
+   while(!points.empty()){
+      stackOfPoints.push(points.back());
+      points.pop_back();
+   }
+   cout << "Containers filled successfuly.\n";
    
+   cout << "Initializing route creation. Please wait, this may be a few minutes.\n";
+   point tempPoint1;
+   point tempPoint2;
+   point tempForTurn;
+   waypoint tempWay;
+   bool badPath = false;
+   int col = -1;
+   vector<point> tempPoints;
+   int i = 0;
+   int cnt = 2;
+   while(!stackOfPoints.empty()){
+      tempPoint1 = stackOfPoints.top();
+      stackOfPoints.pop();
+      tempPoint2 = stackOfPoints.top();
+      stackOfPoints.pop();
+      badPath = false;
+      
+      col = -1;
+      col = collides(tempPoint2, obstacles);
+      if(col != -1){
+         cout << "Problem encountered. Fixing..." << endl;
+         tempForTurn = stackOfPoints.top();
+         stackOfPoints.pop();
+         tempPoints = radialRevision(tempPoint1, tempForTurn, tempPoint2, obstacles.at(col));
+         while(!tempPoints.empty()){
+            stackOfPoints.push(*tempPoints.end());
+            tempPoints.pop_back();
+         }
+      }
+      else{
+         for(i = 0; (i < obstacles.size()) && !badPath; i++){
+            if(!pathCheckClear(tempPoint1, tempPoint2, obstacles.at(i))){
+               badPath = true;
+               tempForTurn = midpoint(tempPoint1, tempPoint2);
+            }
+         }
+         if(badPath){
+            stackOfPoints.push(tempPoint1);
+            stackOfPoints.push(tempForTurn);
+            stackOfPoints.push(tempPoint2);
+         }
+         else{
+            tempWay = waypoint(tempPoint1.lat, tempPoint1.log, cnt++, tempPoint1.height);
+            waypoints.push_back(tempWay);
+         }
+      }
+   }
+   routeWritter(waypoints);
+}
+
+int main() {
+   masterRouteMaker();
+   return 0;
 }

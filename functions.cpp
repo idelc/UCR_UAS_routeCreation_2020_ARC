@@ -316,7 +316,7 @@ vector<point> radialRevision(point& clearB, point& conf, point& clearE, obstacle
    return arcTurn(clearB, confExt, clearE);
 }
 
-void routeWritter(list<waypoint> wayPointsFin){
+void routeWritter(list<waypoint>& wayPointsFin){
    cout << "Writing file OwO\n";
    ofstream write(finFileName());
    if(!write.is_open()){
@@ -357,7 +357,7 @@ void routeWritter(list<waypoint> wayPointsFin){
    int lastTemp = 1;
    for(std::list<waypoint>::iterator it= wayPointsFin.begin(); it != wayPointsFin.end(); ++it){
       pointWriter(write,*it);
-      lastTemp = it->sequenceNumber + 1;
+      lastTemp = it->sequenceNumber;
    }
 
    write << "\t\t\t{\n";
@@ -407,7 +407,7 @@ void pointWriter(ostream& out, const waypoint& toWriteq){
    out << "\t\t\t\t\"AltitudeMode\": 1,\n";
    out << "\t\t\t\t\"autoContinue\": true,\n";
    out << "\t\t\t\t\"command\": 16,\n";
-   out << "\t\t\t\t\"doJumpId\": " << toWriteq.sequenceNumber + 1;
+   out << "\t\t\t\t\"doJumpId\": " << toWriteq.sequenceNumber;
    out << ",\n";
    out << "\t\t\t\t\"frame\": 3,\n";
    out << "\t\t\t\t\"params\": [\n";
