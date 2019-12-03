@@ -1,3 +1,6 @@
+#ifndef PROTOTYPES_H
+#define PROTOTYPES_H
+
 #include <list>
 #include <vector>
 #include <string>
@@ -8,13 +11,14 @@ class point{               //specifies a point in space in decimal degrees
 	double log;
     double height;
     bool crit;
-    point();
+    point(): lat(0), log(0), height(0), crit(0){};
     point(double lati, double lo, double hi = 200): lat(lati), log(lo), crit(false){};
 };
 
 class waypoint : public point{
  public:
-    int sequenceNumber; 
+    int sequenceNumber;
+    waypoint(): point(), sequenceNumber(-1){};
     waypoint(double lati, double lo, int seq, double hi = 200): point(lati, lo, hi), sequenceNumber(seq){};    //what number are we along route
 };
 
@@ -42,6 +46,8 @@ std::vector<obstacle> readObstacles2(std::string);
 
 std::list<point> readPoints(std::string);
 
+std::list<point> readPoints2(std::string);
+
 int collides(const point&, vector<obstacle>&);
 
 double distanceFt(point&, point&);
@@ -58,14 +64,14 @@ vector<point> arcTurn(point&, point&, point&);
 
 vector<point> radialRevision(point&, point&, point&, obstacle&);
 
-// waypointRadial Revision? If all else is done, plan and implement
+vector<point> radialRevision(point& clearB, point& conf, point& clearE, obstacle& inWay);
 
-vector<waypoint> routeCreation();
-
-void routeWritter();
+void routeWritter(list<waypoint>& );
 
 void wayWritter(const point);
 
 void dropWritter(const point);
 
 string finFileName();
+
+#endif
