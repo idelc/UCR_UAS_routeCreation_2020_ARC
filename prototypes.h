@@ -4,6 +4,10 @@
 #include <list>
 #include <vector>
 #include <string>
+#include <fstream>
+#include <iostream>
+
+using namespace std;
 
 class point{               //specifies a point in space in decimal degrees
  public:
@@ -48,11 +52,11 @@ std::list<point> readPoints(std::string);
 
 std::list<point> readPoints2(std::string);
 
-int collides(const point&, vector<obstacle>&);
+int collides(const point&, const std::vector<obstacle>&);
 
-double distanceFt(point&, point&);
+double distanceFt(const point&, const point&);
 
-point midpoint(point&, point&);
+point midpoint(const point&, const point&);
 
 bool pathCheckClear(const point&, const point&, const obstacle&);
 
@@ -60,18 +64,20 @@ bool turnAhead(const point&, const point&, const point&);
 
 double turnAngleMax(const point&, const point&);
 
-vector<point> arcTurn(point&, point&, point&);
+std::vector<point> arcTurn(point&, point&, point&);
 
-vector<point> radialRevision(point&, point&, point&, obstacle&);
+std::vector<point> radialRevision(point&, point&, point&, obstacle&);
 
-vector<point> radialRevision(point& clearB, point& conf, point& clearE, obstacle& inWay);
+std::vector<point> radialRevision(point& clearB, point& conf, point& clearE, obstacle& inWay);
 
-void routeWritter(list<waypoint>& );
+void routeWritter(std::list<waypoint>& );
 
 void wayWritter(const point);
 
 void dropWritter(const point);
 
-string finFileName();
+std::string finFileName();
+
+void pointWriter(std::ostream&, const waypoint&);
 
 #endif
