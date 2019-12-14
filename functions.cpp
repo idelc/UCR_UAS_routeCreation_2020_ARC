@@ -326,7 +326,7 @@ void routeWritter(list<waypoint>& wayPointsFin){
 
    write << "{\n\t\"fileType\": \"Plan\",\n";
    write << "\"geoFence\": {\n";
-   write << "\t\t\"circles\": [";
+   write << "\t\t\"cirarcTurncles\": [";
    write << "\t\t],\n";
    write << "\t\t\"polygons\": [";
    write << "\t\t],\n";

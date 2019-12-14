@@ -9,7 +9,7 @@
 using namespace std;
 
 void masterRouteMaker(){
-   char trash;
+   string trash;
    string fileName;
    vector<obstacle> obstacles;
    list<point> points;
@@ -18,21 +18,30 @@ void masterRouteMaker(){
 
    cout << "MarshManeuvers\nUniversity of California, Riverside - Unmanned Aerial Systems 2020\n\n";
    cout << "Hello!\nPlease ensure connection to plane is established and preparation checklist has been successfuly completed.\n";
-   cout << "Press any key to continue\n";
-   cin >> trash; // TODO: can I output backspace?
+   cout << "Press any key, then enter, to continue\n";
+   cin.sync();
+   cin.ignore();
+   getline(cin, trash); // TODO: can I output backspace?
    cout << endl;
    cout << "Please verify that the files containg obstacles and mandatory waypoints are in the same folder as this program\n";
-   cout << "Press any key to continue\n";
-   cin >> trash;
+   cout << "Press any key, then enter, to continue\n";
+   cin.sync();
+   cin.ignore();
+   getline(cin, trash);
    cout << endl;
    cout << "Preparing route generation...\n";
    cout << "Please enter the full name of the obstacle file: ";
+   cin.sync();
+   // cin.ignore();
    getline(cin, fileName);
    cout << endl;
+   cout << "The name entered was: " << fileName << endl;
    obstacles = readObstacles(fileName);
    cout << "Obstacles successfully read.\n";
 
    cout << "Please enter the full name of the point file: ";
+   cin.sync();
+   // cin.ignore();
    getline(cin, fileName);
    cout << endl;
    points = readPoints(fileName);
