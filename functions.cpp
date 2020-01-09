@@ -518,7 +518,7 @@ bool intersection(point& begPath, point& endPath, point& begBound, point& endBou
         return true;
     }
     else
-    {
+    { 
         return false;
     }
 }
